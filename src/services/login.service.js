@@ -14,9 +14,7 @@ const httpStatusCodes = require('../helpers/httpstatusCode');
       e.status = httpStatusCodes.BAD_REQUEST;
       throw e;
     }
-    const { password: _, ...userData } = user.dataValues;
-    const token = createToken(userData);
-    
+    const token = createToken({ email });
     return token;
 };
 
