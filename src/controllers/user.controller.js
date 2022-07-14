@@ -1,11 +1,17 @@
 const userService = require('../services/user.service');
-const httpStatusCodes = require('../helpers/httpstatusCode');
+const httpStatusCode = require('../helpers/httpstatusCode');
 
 const createUser = async (req, res) => {
   const token = await userService.createUser(req.body);
-  return res.status(httpStatusCodes.CREATED).json({ token });
+  return res.status(httpStatusCode.CREATED).json({ token });
+};
+
+const getUsers = async (_req, res) => {
+  const result = await userService.getAll();
+  return res.status(httpStatusCode.OK).json(result);
 };
 
 module.exports = {
   createUser,
+  getUsers,
 };
