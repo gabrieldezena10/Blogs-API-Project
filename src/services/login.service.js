@@ -2,7 +2,7 @@ const { createToken } = require('./jwt.service');
 const { User } = require('../database/models/index');
 const httpStatusCodes = require('../helpers/httpstatusCode');
 
-  const createUser = async ({ email, password }) => {
+  const login = async ({ email, password }) => {
     if (!email || !password) {
       const e = new Error('Some required fields are missing');
       e.status = httpStatusCodes.BAD_REQUEST;
@@ -21,5 +21,5 @@ const httpStatusCodes = require('../helpers/httpstatusCode');
 };
 
 module.exports = {
-  createUser,
+  login,
 };
