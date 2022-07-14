@@ -39,13 +39,23 @@ const createUser = async (obj) => {
 };
 
 const getAll = async () => {
-  const users = await User.findAll({
-    attributes: { exclude: ['password'] },
-  });
+  const users = await User.findAll({ attributes: { exclude: ['password'] } });
   return users;
+};
+
+const getById = async (id) => {
+  // const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
+  const user = await User.findOne({ where: { id }, attributes: { exclude: ['password'] } });
+  if (!user) {
+    const e = new Error('User does not exist');
+    e.status = httpStatusCodes.NOT_FOUND;
+    throw e;
+  }
+  return user;
 };
 
 module.exports = {
   createUser,
   getAll,
+  getById,
 };
