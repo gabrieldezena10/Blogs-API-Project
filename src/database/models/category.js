@@ -5,7 +5,7 @@ const createCategoryModel = (sequelize, DataTypes) => {
   }, {
     timestamps: false,
     tableName: 'Categories',
-    underscored: false,
+    underscored: true,
   });
   return Category
 };
