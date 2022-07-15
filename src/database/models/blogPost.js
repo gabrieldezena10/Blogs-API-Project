@@ -1,15 +1,39 @@
 const createBlogPostModel = (sequelize, DataTypes) => {
   const BlogPost = sequelize.define('BlogPost', {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: DataTypes.STRING,
-    content: DataTypes.STRING,
-    userId: DataTypes.INTEGER,
-    published: DataTypes.DATE,
-    updated: DataTypes.DATE,
+    id: { 
+      type: DataTypes.INTEGER, 
+      primaryKey: true, 
+      autoIncrement: true, 
+      allowNull: false
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    content: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    userId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'User',
+        key: 'id'
+      }
+    },
+    published: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    updated: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
   }, {
     timestamps: false,
     tableName: 'BlogPosts',
-    underscored: true,
+    underscored: false,
   });
 
   BlogPost.associate = (models) => {
