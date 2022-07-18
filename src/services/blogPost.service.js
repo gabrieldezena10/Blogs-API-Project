@@ -50,9 +50,16 @@ const getById = async (id) => {
   const data = await BlogPost.findByPk(id, {
     include: [
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
-      { model: Category, as: 'categories', through: { attributes: [''] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
     ],
   });
+
+  if (!data) {
+    const e = new Error('Post does not exist');
+    e.status = httpStatusCodes.NOT_FOUND;
+    throw e;
+  }
+
   return data;
 };
 

@@ -12,7 +12,7 @@ const getAll = async (req, res) => {
 };
 
 const getById = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   const data = await blogPostService.getById(id);
   return res.status(httpstatusCode.OK).json(data);
 };
