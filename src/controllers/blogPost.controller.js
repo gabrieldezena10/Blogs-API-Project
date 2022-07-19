@@ -2,8 +2,12 @@ const blogPostService = require('../services/blogPost.service');
 const httpstatusCode = require('../helpers/httpstatusCode');
 
 const createPost = async (req, res) => {
-  const data = await blogPostService.createBlogPost(req.body);
-  return res.httpstatusCode(httpstatusCode.CREATED).json(data);
+  const { title, content, categoryIds } = req.body;
+  const { id } = req.user.dataValues;
+
+  const data = await blogPostService
+  .createBlogPost(title, content, categoryIds, id);
+  return res.status(httpstatusCode.CREATED).json(data);
 };
 
 const getAll = async (req, res) => {

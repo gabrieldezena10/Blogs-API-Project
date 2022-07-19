@@ -1,45 +1,37 @@
-const Joi = require('joi');
-const { BlogPost, User, Category } = require('../database/models/index');
+const { BlogPost, User, Category, PostCategory } = require('../database/models/index');
 const httpStatusCodes = require('../helpers/httpstatusCode');
 
-const validateBody = (data) => {
-  const schema = Joi.object({
-    title: Joi.string().required().messages({
-      'string.required': 'Some required fields are missing',
-    }),
-    content: Joi.string().required().messages({
-      'string.required': 'Some required fields are missing',
-    }),
-    categoryIds: Joi.required().messages({
-      'array.not.empty': '"categoryIds" not found',
-    }),
-  });
-  const { error, value } = schema.validate(data);
-  if (error) throw error;
-  return value;
-};
-
-const createBlogPost = async (obj) => {
-  const validatedData = validateBody(obj);
-  const { title } = validatedData;
-  if (!title) {
+const createBlogPost = async (title, content, categoryIds, userId) => {
+  if (!title || !content || !categoryIds) {
     const e = new Error('Some required fields are missing');
     e.status = httpStatusCodes.BAD_REQUEST;
     throw e;
   }
-//   const { count } = await BlogPost.findAndCountAll({
-//     include: [{ model: PostCategory, as: 'PostCategory', attributes: { exclude: ['postId'] } }],
-//     where: { categoryIds },
-// });
 
-  // const result = await BlogPost.create({ title, content, userId, updated, published });
-  // return result;
+  const allCategories = await Category.findAll();
+  const availableCategoriesIds = allCategories.map((item) => item.id);
+  const validCategoryIds = categoryIds.every((catId) => availableCategoriesIds.includes(catId));
+
+  if (validCategoryIds === false) {
+    const e = new Error('"categoryIds" not found');
+    e.status = httpStatusCodes.BAD_REQUEST;
+    throw e;
+  }
+
+  const result = await BlogPost
+    .create({ title, content, userId, updated: new Date(), published: new Date() });
+
+  await Promise.all(categoryIds.map((catId) => 
+    PostCategory.create({ postId: result.dataValues.id, categoryId: catId })));
+
+  return result;
 };
 
 const getAll = async () => {
   const data = await BlogPost.findAll({
     include: [
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      // https://sequelize.org/docs/v6/advanced-association-concepts/eager-loading/
       { model: Category, as: 'categories', through: { attributes: [] } },
     ],
   });
@@ -62,6 +54,12 @@ const getById = async (id) => {
 
   return data;
 };
+
+// const updatePost = async (id) => {
+//   const data = await BlogPost.findOne({
+//     where: { id },
+//   });
+// };
 
 module.exports = {
   createBlogPost,
