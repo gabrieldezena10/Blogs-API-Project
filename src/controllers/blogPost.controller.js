@@ -3,7 +3,8 @@ const httpstatusCode = require('../helpers/httpstatusCode');
 
 const createPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
-  const { id } = req.user.dataValues;
+  // const { id } = req.user.dataValues;
+   const { id } = req.user;
 
   const data = await blogPostService
   .createBlogPost(title, content, categoryIds, id);
@@ -21,8 +22,17 @@ const getById = async (req, res) => {
   return res.status(httpstatusCode.OK).json(data);
 };
 
+const updatePost = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const userId = req.user.id;
+  const data = await blogPostService.updatePost(id, { title, content }, userId);
+  return res.status(httpstatusCode.OK).json(data); 
+};
+
 module.exports = {
   createPost,
   getAll,
   getById,
+  updatePost,
 };

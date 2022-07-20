@@ -55,14 +55,27 @@ const getById = async (id) => {
   return data;
 };
 
-// const updatePost = async (id) => {
-//   const data = await BlogPost.findOne({
-//     where: { id },
-//   });
-// };
+const updatePost = async (id, { title, content }, userId) => {
+  const authorizedUser = await getById(id);
+  if (authorizedUser.id !== userId) {
+    const e = new Error('Unauthorized user');
+    e.status = httpStatusCodes.UNAUTHORIZED;
+    throw e;
+  }
+  if (!title || !content) {
+    const e = new Error('Some required fields are missing');
+    e.status = httpStatusCodes.BAD_REQUEST;
+    throw e;
+  }
+
+  await BlogPost.update({ title, content }, { where: { id } });
+
+  return { ...authorizedUser.dataValues, title, content };
+};
 
 module.exports = {
   createBlogPost,
   getAll,
   getById,
+  updatePost,
 };
