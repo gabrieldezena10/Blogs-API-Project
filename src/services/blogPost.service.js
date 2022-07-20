@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPost, User, Category, PostCategory } = require('../database/models/index');
 const httpStatusCodes = require('../helpers/httpstatusCode');
 
@@ -84,10 +85,28 @@ const destroyPost = async (id, userId) => {
   await BlogPost.destroy({ where: { id } });
 };
 
+const getBySearchTerm = async (queryTerm) => {
+  // https://sequelize.org/docs/v6/core-concepts/model-querying-basics/#operators
+  const data = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+    where: {
+      [Op.or]: {
+        title: { [Op.substring]: queryTerm },
+        content: { [Op.substring]: queryTerm },
+      },
+    },
+  });
+  return data;
+};
+
 module.exports = {
   createBlogPost,
   getAll,
   getById,
   updatePost,
   destroyPost,
+  getBySearchTerm,
 };

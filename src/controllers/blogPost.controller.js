@@ -38,10 +38,17 @@ const destroyPost = async (req, res) => {
   return res.status(httpstatusCode.NO_CONTENT).end();
 };
 
+const getBySearchTerm = async (req, res) => {
+  const { q: queryTerm } = req.query;
+  const data = await blogPostService.getBySearchTerm(queryTerm);
+  return res.status(httpstatusCode.OK).json(data);
+};
+
 module.exports = {
   createPost,
   getAll,
   getById,
   updatePost,
   destroyPost,
+  getBySearchTerm,
 };
