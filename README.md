@@ -17,7 +17,7 @@ ORM Sequelize, Node.js, Arquitetura MSC, JOI, Autentificação - JSON WEB Token,
 
 ## Utilização
 
-- git clone git@github.com:gabrieldezena10/store-manager-project.git
+- git clone git@github.com:gabrieldezena10/Blogs-API-Project.git
 
 Sem Docker
 
