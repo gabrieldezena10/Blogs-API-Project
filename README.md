@@ -19,14 +19,16 @@ ORM Sequelize, Node.js, Arquitetura MSC, JOI, Autentificação - JSON WEB Token,
 
 - git clone git@github.com:gabrieldezena10/Blogs-API-Project.git
 
-Sem Docker
+point_right Sem Docker
 
 - npm install
 
-Com Docker
+point_right Com Docker
+warning Antes de começar, seu docker-compose precisa estar na versão 1.29 ou superior. 
 
-docker-compose-up -d
-
+docker-compose up -d --build
+docker exec -it blogs_api bash
+npm install (Instale dentro do container)
 
   ### 👀 Observações importantes:
 
