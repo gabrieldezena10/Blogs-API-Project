@@ -81,11 +81,6 @@ const destroyPost = async (id, userId) => {
     throw e;
   }
 
-  if (!post) {
-    const e = new Error('Post does not exist');
-    e.status = httpStatusCodes.NOT_FOUND;
-    throw e;
-  }
   await BlogPost.destroy({ where: { id } });
 };
 

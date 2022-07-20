@@ -4,10 +4,11 @@ const httpstatusCode = require('../helpers/httpstatusCode');
 const createPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
   // const { id } = req.user.dataValues;
-   const { id } = req.user;
+  //  const { id } = req.user;
+  const userId = req.user.id;
 
   const data = await blogPostService
-  .createBlogPost(title, content, categoryIds, id);
+  .createBlogPost(title, content, categoryIds, userId);
   return res.status(httpstatusCode.CREATED).json(data);
 };
 
