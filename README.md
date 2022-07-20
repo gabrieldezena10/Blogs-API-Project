@@ -26,11 +26,11 @@ ORM Sequelize, Node.js, Arquitetura MSC, JOI, Autentificação - JSON WEB Token,
 ### 👉 Com Docker
 **:warning: Antes de começar, seu docker-compose precisa estar na versão 1.29 ou superior. 
 
-docker-compose up -d --build.
-docker exec -it blogs_api bash.
-npm install (Instale dentro do container).
+- docker-compose up -d --build.
+- docker exec -it blogs_api bash.
+- npm install (Instale dentro do container).
 
-  ### 👀 Observações importantes:
+ ### 👀 Observações importantes:
 
   Em cada requisito você encontrará uma imagem demonstrando como sua API deverá se comportar, dada a requisição específica.
 
