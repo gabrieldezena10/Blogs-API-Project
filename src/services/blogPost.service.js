@@ -57,7 +57,7 @@ const getById = async (id) => {
 
 const updatePost = async (id, { title, content }, userId) => {
   const authorizedUser = await getById(id);
-  if (authorizedUser.id !== userId) {
+  if (authorizedUser.user.id !== userId) {
     const e = new Error('Unauthorized user');
     e.status = httpStatusCodes.UNAUTHORIZED;
     throw e;
@@ -73,9 +73,26 @@ const updatePost = async (id, { title, content }, userId) => {
   return { ...authorizedUser.dataValues, title, content };
 };
 
+const destroyPost = async (id, userId) => {
+  const post = await getById(id);
+  if (post.user.id !== userId) {
+    const e = new Error('Unauthorized user');
+    e.status = httpStatusCodes.UNAUTHORIZED;
+    throw e;
+  }
+
+  if (!post) {
+    const e = new Error('Post does not exist');
+    e.status = httpStatusCodes.NOT_FOUND;
+    throw e;
+  }
+  await BlogPost.destroy({ where: { id } });
+};
+
 module.exports = {
   createBlogPost,
   getAll,
   getById,
   updatePost,
+  destroyPost,
 };
